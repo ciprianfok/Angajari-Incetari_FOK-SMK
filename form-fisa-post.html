@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fișă post Lucrător comercial — completează</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #eef1f5; color: #1f2328; }
+    header { background: #24292f; color: #fff; padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+    header a.back { color: #fff; text-decoration: none; opacity: .85; }
+    header .title { font-weight: 600; }
+    main { max-width: 720px; margin: 24px auto; padding: 0 16px 60px; }
+    .card { background: #fff; border: 1px solid #d0d7de; border-radius: 12px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .brand { font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #656d76; text-align: left; margin: 0 0 4px; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    .sub { color: #656d76; font-size: 14px; margin: 0 0 18px; }
+    label { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+    input, select, textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #d0d7de; border-radius: 8px;
+      font-size: 15px; font-family: inherit; background: #fff;
+    }
+    input.invalid, select.invalid, .sigwrap.invalid { border-color: #cf222e; background: #fff6f6; }
+    .hidden { display: none; }
+    .fisa { border: 1px solid #e1e6ea; border-radius: 10px; background: #fafbfc; padding: 16px 18px;
+      max-height: 340px; overflow-y: auto; margin: 18px 0 6px; font-size: 13.5px; line-height: 1.55; }
+    .fisa h3 { font-size: 14px; margin: 14px 0 4px; color: #24292f; }
+    .fisa h3:first-child { margin-top: 0; }
+    .fisa p { margin: 4px 0; }
+    .fisa .li { margin: 3px 0 3px 16px; text-indent: -12px; }
+    .scroll-note { font-size: 12px; color: #8a929b; margin: 0 0 4px; }
+    .chkrow { display: flex; align-items: flex-start; gap: 10px; margin-top: 16px;
+      padding: 12px 14px; border: 1px solid #d0d7de; border-radius: 8px; background: #fff; }
+    .chkrow.invalid { border-color: #cf222e; background: #fff6f6; }
+    .chkrow input { width: 20px; height: 20px; margin-top: 1px; flex-shrink: 0; }
+    .chkrow label { margin: 0; font-weight: 500; font-size: 14px; }
+    button {
+      margin-top: 22px; width: 100%; padding: 13px; border: none; border-radius: 8px;
+      background: #2da44e; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer;
+    }
+    button:hover { background: #2c974b; }
+    .hint { font-size: 12px; color: #8a929b; margin-top: 14px; text-align: center; }
+    .err { color: #cf222e; font-size: 13px; font-weight: 600; margin-top: 12px; text-align: center; display: none; }
+    .sigwrap { border: 1px dashed #b0b8c0; border-radius: 8px; background: #fff; margin-top: 6px; }
+    #sig { display: block; width: 100%; height: 160px; touch-action: none; border-radius: 8px; }
+    .sigclear { margin-top: 8px; background: #eef1f5; color: #24292f; border: 1px solid #d0d7de;
+      border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; width: auto; }
+    .sigclear:hover { background: #e2e6eb; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="index.html">←</a>
+    <span class="title">Fișă post Lucrător comercial</span>
+  </header>
+  <main>
+    <div class="card">
+      <p class="brand">FUMEAZAOK / SMOKEMANIA</p>
+      <h1>Fișa postului — Lucrător comercial</h1>
+      <p class="sub">Completează datele, citește fișa, bifează și semnează, apoi apasă „Descarcă PDF".</p>
+
+      <label>Nume și prenume titular</label>
+      <input id="nume" type="text" placeholder="ex. Popescu Ion">
+
+      <label>Funcția</label>
+      <select id="functia">
+        <option>Lucrător comercial</option>
+        <option>Manager</option>
+        <option value="__alt__">Altul...</option>
+      </select>
+      <input id="functia_alt" class="hidden" type="text" placeholder="Scrie funcția" style="margin-top:8px">
+
+      <label>Punct de lucru</label>
+      <input id="punct" type="text" placeholder="ex. SmokeMania Centru">
+
+      <p class="scroll-note">↓ Citește fișa integral (derulează în casetă):</p>
+      <div class="fisa" id="fisaBox"></div>
+
+      <div class="chkrow" id="chkrow">
+        <input type="checkbox" id="confirm">
+        <label for="confirm">Am citit și am luat la cunoștință atribuțiile din fișa postului.</label>
+      </div>
+
+      <label>Data</label>
+      <input id="data" type="date">
+
+      <label>Semnătura titularului</label>
+      <div class="sigwrap" id="sigwrap"><canvas id="sig"></canvas></div>
+      <button type="button" class="sigclear" id="sigclear">Șterge semnătura</button>
+
+      <button id="gen">⬇ Descarcă PDF</button>
+      <p class="err" id="err">Completează câmpurile, bifează confirmarea și semnează înainte de descărcare.</p>
+      <p class="hint">Documentul se generează în calculatorul tău.</p>
+    </div>
+  </main>
+
+  <script src="jspdf.umd.min.js"></script>
+  <script>
+    const FISA = [
+      {t:'Identificarea postului'},
+      {p:'Numele și prenumele titularului: {{nume}}'},
+      {p:'Denumirea postului: Lucrător comercial'},
+      {p:'Poziția în COR / Cod: 522303'},
+      {p:'Departamentul / locația: Punct de Lucru - {{punct}}'},
+      {p:'Nivelul postului: Execuție: Entry'},
+      {t:'Relațiile'},
+      {p:'Ierarhice: Se subordonează Șefului de Magazin. Are în subordine: Nu este cazul.'},
+      {p:'Funcționale (colaborare, pe orizontală): Cu alți colegi.'},
+      {p:'Reprezentare: Nu este cazul.'},
+      {t:'Scopul general al postului'},
+      {p:'Asigurarea desfășurării activității comerciale în condiții de legalitate, eficiență și profesionalism, prin vânzarea produselor, gestionarea corectă a stocurilor și respectarea tuturor procedurilor interne și obligațiilor legale aplicabile.'},
+      {t:'Obiectivele postului'},
+      {li:'Întocmirea documentelor specifice activității de vânzare a mărfii și a documentelor de primire a mărfurilor.'},
+      {li:'Promovarea imaginii magazinului și a standului.'},
+      {li:'Verificarea și menținerea stocurilor de rezervă.'},
+      {t:'Descrierea sarcinilor / atribuțiilor / activităților'},
+      {p:'La data începerii colaborării, angajatul se obligă să preia sub semnătură, în baza unui proces verbal de inventariere, toată marfa din punctul de lucru unde va lucra. Angajatul este direct răspunzător de corectitudinea stocului de marfă, atât pentru minusurile cât și pentru plusurile survenite.'},
+      {li:'Întâmpină clienții și primește solicitările lor pentru a afla necesitățile reale în raport cu produsele și serviciile oferite, aducându-le la cunoștința superiorului direct.'},
+      {li:'Identifică produsele rapid și corect, consultând listele de produse și stocurile.'},
+      {li:'Prezintă produsele prin atributele lor de calitate, pentru informarea corectă a clienților.'},
+      {li:'Informează clientul asupra prețului produselor și condițiilor de livrare.'},
+      {li:'Menține tot timpul prețul produselor afișat, la vedere, pe fiecare produs.'},
+      {li:'Ambalează produsele vândute conform normelor interne și legale.'},
+      {li:'Completează cu exactitate documentele de vânzare: borderouri, facturi etc.'},
+      {li:'Încasarea banilor se face prin numărare, pentru ca suma să corespundă chitanței.'},
+      {li:'Depune încasările în fiecare zi de Luni și Joi la Bancă sau le predă șefului de magazin, răspunzând administrativ, material și penal de orice pagubă produsă din vina proprie.'},
+      {t:'Pregătirea documentelor pentru contabilitate'},
+      {li:'Marchează zilnic pe raportul Z încasările prin card.'},
+      {li:'Aranjează rapoartele Z și Settlement în ordine cronologică (1 – sfârșitul lunii).'},
+      {li:'Generează raportul lunar detaliat pentru perioada 1 – ultima zi a lunii.'},
+      {li:'Verifică corectitudinea cotelor de TVA și informează superiorul în caz de neconcordanțe.'},
+      {li:'Generează la începutul lunii raportul ANAF (cod ON, 5, 8) și transmite dovada conform procedurii.'},
+      {li:'Atașează în plicul contabil toate bonurile și facturile de achiziție, chitanțele, concediile medicale și alte documente solicitate.'},
+      {li:'Transmite plicul către sediu în prima zi lucrătoare după încheierea lunii.'},
+      {t:'Menținerea standului și a stocurilor'},
+      {li:'Menține zilnic estetica standului și asigură igiena rafturilor și vitrinelor.'},
+      {li:'Susține imaginea standului prin materiale promoționale.'},
+      {li:'Monitorizează zilnic stocul de produse conform normelor interne.'},
+      {li:'Verifică în primele 5 zile ale lunii data de expirare a mărfii; dacă termenul e sub 45 de zile anunță șeful de magazin, altfel se obligă să achite produsele la prețul de achiziție.'},
+      {li:'La preluarea mărfii verifică comanda și anunță imediat superiorul dacă observă diferențe sau probleme.'},
+      {li:'Depozitează produsele cu respectarea NPM și PSI.'},
+      {li:'O dată pe lună (pe 15 sau 30) realizează stocul întregului magazin și redactează un proces verbal de inventariere, anunțând superiorul dacă apar diferențe.'},
+      {li:'Nu permite accesul în magazin niciunei persoane fără acordul scris și prealabil al superiorului.'},
+      {li:'Răspunde integral față de angajator pentru pagubele cauzate în gestiunea sa (administrativ, material și penal).'},
+      {li:'Își menține cunoștințele profesionale actualizate despre produsele comercializate.'},
+      {li:'La finalul colaborării realizează un proces verbal de inventariere; în lipsa prezenței, acceptă inventarul realizat de superiori.'},
+      {t:'Responsabilități — comunicare'},
+      {li:'Asigură o comunicare eficientă cu clienții și colaboratorii.'},
+      {li:'Răspunde de transmiterea de informații corecte și în timp util.'},
+      {li:'Efectuează instruirea profesională la locul de muncă și își menține cunoștințele la zi, folosind instrucțiuni și surse online; solicită sprijinul superiorului unde e nevoie.'},
+      {t:'Responsabilități — echipament'},
+      {li:'Respectă procedurile de utilizare a echipamentului din dotare.'},
+      {li:'Întreține echipamentul de protecție conform normelor.'},
+      {li:'Participă la instructajul periodic de protecția muncii.'},
+      {li:'Anunță imediat orice defecțiune a echipamentului.'},
+      {t:'Responsabilități — obiectivele postului'},
+      {li:'Răspunde de activitatea din magazin la cele mai înalte standarde.'},
+      {li:'Aplică procedurile de calitate și răspunde pentru produsele vândute.'},
+      {li:'Raportează deficiențele de calitate persoanelor abilitate.'},
+      {t:'Securitatea și sănătatea muncii'},
+      {li:'Participă la instructajele SSM și PSI și aplică normele.'},
+      {li:'Respectă măsurile de SSM, PSI și normele de ordine internă.'},
+      {t:'Regulamente / proceduri de lucru'},
+      {li:'Respectă programul, punctualitatea în raportări și cerințele de calitate.'},
+      {li:'Respectă procedurile de urgență și evacuare.'},
+      {li:'Respectă Regulamentul Intern, ROF, actele normative în vigoare și CCM aplicabil.'},
+      {t:'Condițiile de lucru'},
+      {p:'Program: ture de 2 zile lucrate urmate de 2 zile libere, media de 40 ore/săptămână conform Codului Muncii, ori altă variantă stabilită de angajați și aprobată de managerul de zonă.'},
+      {p:'Mediu de lucru: spațiu comercial interior, condiții normale. Poate fi detașat temporar la alte puncte de lucru din același oraș, cu acordul superiorului.'},
+      {t:'Indicatori de performanță'},
+      {li:'Grad de satisfacție clienți > 90%.'},
+      {li:'Zero reclamații justificate / trimestru.'},
+      {li:'Acuratețea gestiunii: diferențe < 0,5%.'},
+      {li:'Respectarea termenelor de raportare (100%).'},
+      {li:'Participare activă la acțiunile de promovare.'},
+      {li:'Perioada de evaluare a performanțelor: anual.'},
+      {t:'Specificațiile postului'},
+      {p:'Studii: profesionale sau liceale cu profil economic. Competențe în gestiune primară a mărfurilor. Experiența nu este obligatorie; au prioritate persoanele cu experiență în domeniul comercial.'},
+      {t:'Penalizări'},
+      {p:'Lucrătorul comercial răspunde material, disciplinar sau penal pentru pagubele cauzate din vina sa. Exemple:'},
+      {li:'Neîncasarea corectă a sumelor: avertisment scris + acoperire prejudiciu; a doua abatere: 5% din salariu o lună + prejudiciu; 3 abateri în 6 luni: desfacerea contractului + prejudiciu.'},
+      {li:'Nerespectarea programului: avertisment verbal → scris → desfacerea contractului. Absență nemotivată: 10% din salariu; repetare: desfacerea contractului.'},
+      {li:'Neconformitatea gestiunii: penalizare egală cu prejudiciul; diferențe mari: desfacerea contractului și acțiuni legale.'},
+      {li:'Nerespectarea normelor de siguranță: avertisment → 5% din salariu; periclitarea siguranței: desfacerea contractului.'},
+      {li:'Refuzul sarcinilor: avertisment → penalizare progresivă până la desfacerea contractului.'},
+      {li:'Abateri grave (furt, violență, hărțuire, consum de alcool/droguri la muncă): desfacerea imediată a contractului și posibile acțiuni legale.'},
+      {t:'Produse interzise minorilor'},
+      {p:'Constituie abatere disciplinară extrem de gravă vânzarea sau facilitarea vânzării către minori a produselor interzise persoanelor sub 18 ani. Salariatul are obligația de a solicita actul de identitate la orice îndoială privind vârsta. Nerespectarea se sancționează cu desfacerea contractului individual de muncă.'},
+      {t:'Răspunderea patrimonială'},
+      {p:'Dacă din culpa sau intenția salariatului Societatea este sancționată contravențional, administrativ sau penal, salariatul poate fi obligat la repararea integrală a prejudiciului, în condițiile art. 254 și următoarele din Codul muncii.'},
+      {t:'Respectarea ROI al partenerilor'},
+      {p:'Salariatul respectă Regulamentele de Ordine Interioară ale centrelor comerciale / partenerilor. Încălcarea care determină sancțiuni Societății atrage răspunderea disciplinară și patrimonială, conform art. 254 și următoarele din Codul muncii.'}
+    ];
+
+    function noDia(s){
+      return (s||'')
+        .replace(/[ăâà]/g,'a').replace(/[ĂÂÀ]/g,'A')
+        .replace(/[îì]/g,'i').replace(/[ÎÌ]/g,'I')
+        .replace(/[șş]/g,'s').replace(/[ȘŞ]/g,'S')
+        .replace(/[țţ]/g,'t').replace(/[ȚŢ]/g,'T')
+        .replace(/[éè]/g,'e').replace(/[ÉÈ]/g,'E');
+    }
+    function raw(id){ return (document.getElementById(id).value || '').trim(); }
+    function dRO(v){ if(!v) return '__________'; const p=v.split('-'); return p.length===3 ? p[2]+'.'+p[1]+'.'+p[0] : v; }
+    function selVal(selId){ const s=document.getElementById(selId); return s.value==='__alt__' ? raw(selId+'_alt') : raw(selId); }
+    function sigJpeg(cv){
+      const tmp = document.createElement('canvas');
+      tmp.width = cv.width; tmp.height = cv.height;
+      const c = tmp.getContext('2d');
+      c.fillStyle = '#fff'; c.fillRect(0,0,tmp.width,tmp.height);
+      c.drawImage(cv, 0, 0);
+      return tmp.toDataURL('image/jpeg', 0.6);
+    }
+    function subst(txt){
+      return txt.replace('{{nume}}', raw('nume') || '..............................')
+                .replace('{{punct}}', raw('punct') || '..............................');
+    }
+
+    (function(){
+      const box = document.getElementById('fisaBox');
+      function refresh(){
+        let h='';
+        FISA.forEach(function(b){
+          if(b.t) h+='<h3>'+b.t+'</h3>';
+          else if(b.p) h+='<p>'+subst(b.p)+'</p>';
+          else if(b.li) h+='<p class="li">• '+subst(b.li)+'</p>';
+        });
+        box.innerHTML=h;
+      }
+      document.getElementById('nume').addEventListener('input', refresh);
+      document.getElementById('punct').addEventListener('input', refresh);
+      refresh();
+    })();
+
+    (function(){
+      const s=document.getElementById('functia'), alt=document.getElementById('functia_alt');
+      s.addEventListener('change', function(){
+        if(s.value==='__alt__'){ alt.classList.remove('hidden'); alt.focus(); }
+        else { alt.classList.add('hidden'); alt.value=''; }
+      });
+    })();
+
+    (function(){
+      const d=new Date();
+      document.getElementById('data').value = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    })();
+
+    const canvas = document.getElementById('sig');
+    const ctx = canvas.getContext('2d');
+    let drawing = false, hasSig = false;
+    function resizeCanvas(){
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#111';
+    }
+    setTimeout(resizeCanvas, 50);
+    function pos(e){
+      const r = canvas.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - r.left, y: t.clientY - r.top };
+    }
+    function start(e){ drawing = true; hasSig = true; document.getElementById('sigwrap').classList.remove('invalid'); const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); }
+    function move(e){ if(!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); }
+    function end(){ drawing = false; }
+    canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', move);
+    canvas.addEventListener('touchend', end);
+    document.getElementById('sigclear').addEventListener('click', function(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height); hasSig = false;
+    });
+
+    document.getElementById('gen').addEventListener('click', function(){
+      const err = document.getElementById('err');
+      err.style.display='none';
+      let ok=true;
+
+      ['nume','functia','punct'].forEach(function(id){
+        const el=document.getElementById(id); el.classList.remove('invalid');
+        let gol = raw(id)==='';
+        if(el.value==='__alt__'){ gol = raw(id+'_alt')===''; if(gol) document.getElementById(id+'_alt').classList.add('invalid'); }
+        if(gol){ el.classList.add('invalid'); ok=false; }
+      });
+      if(raw('data')===''){ document.getElementById('data').classList.add('invalid'); ok=false; }
+      const chkrow = document.getElementById('chkrow'); chkrow.classList.remove('invalid');
+      if(!document.getElementById('confirm').checked){ chkrow.classList.add('invalid'); ok=false; }
+      if(!hasSig){ document.getElementById('sigwrap').classList.add('invalid'); ok=false; }
+      if(!ok){ err.style.display='block'; return; }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      const L=18, W=174, BOTTOM=280; let y=18;
+      function nl(h){ if(y+h > BOTTOM){ doc.addPage(); y=18; } }
+
+      doc.setFont('helvetica','bold'); doc.setFontSize(10);
+      doc.text('FUMEAZAOK / SMOKEMANIA', L, y); y+=8;
+      doc.setFontSize(15);
+      doc.text('FISA POSTULUI - LUCRATOR COMERCIAL', 105, y, {align:'center'}); y+=12;
+
+      FISA.forEach(function(b){
+        if(b.t){
+          nl(10); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+          const tl = doc.splitTextToSize(noDia(b.t), W);
+          doc.text(tl, L, y); y += tl.length*5.5 + 2;
+        } else {
+          doc.setFont('helvetica','normal'); doc.setFontSize(10);
+          const isLi = !!b.li;
+          const raw2 = noDia(subst(b.p || b.li));
+          const prefix = isLi ? '• ' : '';
+          const lines = doc.splitTextToSize(prefix + raw2, isLi ? W-4 : W);
+          nl(lines.length*5 + 1);
+          doc.text(lines, isLi ? L+4 : L, y); y += lines.length*5 + 1;
+        }
+      });
+
+      y += 6;
+      nl(30);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10);
+      doc.text('Functia: ' + noDia(selVal('functia')), L, y); y+=8;
+      doc.text('Data: ' + dRO(raw('data')), L, y); y+=12;
+
+      nl(40);
+      doc.text('Numele si semnatura titularului postului,', L, y);
+      doc.text('Numele si semnatura superiorului ierarhic,', 110, y); y+=4;
+      doc.addImage(sigJpeg(canvas), 'JPEG', L, y, 45, 18);
+      y+=20;
+      doc.text(noDia(raw('nume')), L, y);
+      doc.line(110, y, 185, y); y+=14;
+      doc.setFont('helvetica','bold');
+      doc.text('APROBAT', L, y);
+      doc.setFont('helvetica','normal');
+      doc.text('Director General', L, y+6);
+
+      doc.save('Fisa post ' + noDia(raw('nume')) + '.pdf');
+    });
+  </script>
+</body>
+</html>
