@@ -24,7 +24,7 @@
     .hidden { display: none; }
     .fisa { border: 1px solid #e1e6ea; border-radius: 10px; background: #fafbfc; padding: 16px 18px;
       max-height: 340px; overflow-y: auto; margin: 18px 0 6px; font-size: 13.5px; line-height: 1.55; }
-    .fisa h3 { font-size: 14px; margin: 14px 0 4px; color: #24292f; }
+    .fisa h3 { font-size: 14px; margin: 14px 0 4px; color: #24292f; background: #e6e8eb; padding: 4px 8px; border-radius: 4px; }
     .fisa h3:first-child { margin-top: 0; }
     .fisa p { margin: 4px 0; }
     .fisa .li { margin: 3px 0 3px 16px; text-indent: -12px; }
@@ -179,10 +179,10 @@
       {t:'Penalizări'},
       {p:'Lucrătorul comercial răspunde material, disciplinar sau penal pentru pagubele cauzate din vina sa. Exemple:'},
       {li:'Neîncasarea corectă a sumelor: avertisment scris + acoperire prejudiciu; a doua abatere: 5% din salariu o lună + prejudiciu; 3 abateri în 6 luni: desfacerea contractului + prejudiciu.'},
-      {li:'Nerespectarea programului: avertisment verbal → scris → desfacerea contractului. Absență nemotivată: 10% din salariu; repetare: desfacerea contractului.'},
+      {li:'Nerespectarea programului: avertisment verbal, apoi scris, apoi desfacerea contractului. Absență nemotivată: 10% din salariu; repetare: desfacerea contractului.'},
       {li:'Neconformitatea gestiunii: penalizare egală cu prejudiciul; diferențe mari: desfacerea contractului și acțiuni legale.'},
-      {li:'Nerespectarea normelor de siguranță: avertisment → 5% din salariu; periclitarea siguranței: desfacerea contractului.'},
-      {li:'Refuzul sarcinilor: avertisment → penalizare progresivă până la desfacerea contractului.'},
+      {li:'Nerespectarea normelor de siguranță: avertisment, apoi 5% din salariu; periclitarea siguranței: desfacerea contractului.'},
+      {li:'Refuzul sarcinilor: avertisment, apoi penalizare progresivă până la desfacerea contractului.'},
       {li:'Abateri grave (furt, violență, hărțuire, consum de alcool/droguri la muncă): desfacerea imediată a contractului și posibile acțiuni legale.'},
       {t:'Produse interzise minorilor'},
       {p:'Constituie abatere disciplinară extrem de gravă vânzarea sau facilitarea vânzării către minori a produselor interzise persoanelor sub 18 ani. Salariatul are obligația de a solicita actul de identitate la orice îndoială privind vârsta. Nerespectarea se sancționează cu desfacerea contractului individual de muncă.'},
@@ -198,7 +198,8 @@
         .replace(/[îì]/g,'i').replace(/[ÎÌ]/g,'I')
         .replace(/[șş]/g,'s').replace(/[ȘŞ]/g,'S')
         .replace(/[țţ]/g,'t').replace(/[ȚŢ]/g,'T')
-        .replace(/[éè]/g,'e').replace(/[ÉÈ]/g,'E');
+        .replace(/[éè]/g,'e').replace(/[ÉÈ]/g,'E')
+        .replace(/[–—]/g,'-').replace(/[„”"]/g,'"').replace(/[’]/g,"'");
     }
     function raw(id){ return (document.getElementById(id).value || '').trim(); }
     function dRO(v){ if(!v) return '__________'; const p=v.split('-'); return p.length===3 ? p[2]+'.'+p[1]+'.'+p[0] : v; }
@@ -294,24 +295,26 @@
       const L=18, W=174, BOTTOM=280; let y=18;
       function nl(h){ if(y+h > BOTTOM){ doc.addPage(); y=18; } }
 
-      doc.setFont('helvetica','bold'); doc.setFontSize(10);
+      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(20);
       doc.text('FUMEAZAOK / SMOKEMANIA', L, y); y+=8;
       doc.setFontSize(15);
       doc.text('FISA POSTULUI - LUCRATOR COMERCIAL', 105, y, {align:'center'}); y+=12;
 
       FISA.forEach(function(b){
         if(b.t){
-          nl(10); doc.setFont('helvetica','bold'); doc.setFontSize(11);
-          const tl = doc.splitTextToSize(noDia(b.t), W);
-          doc.text(tl, L, y); y += tl.length*5.5 + 2;
+          nl(12); y += 3;
+          doc.setFillColor(220,220,220);
+          doc.rect(L, y-4.5, W, 7, 'F');
+          doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(20);
+          doc.text(noDia(b.t), L+2, y); y += 6;
         } else {
-          doc.setFont('helvetica','normal'); doc.setFontSize(10);
+          doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(20);
           const isLi = !!b.li;
           const raw2 = noDia(subst(b.p || b.li));
-          const prefix = isLi ? '• ' : '';
+          const prefix = isLi ? '- ' : '';
           const lines = doc.splitTextToSize(prefix + raw2, isLi ? W-4 : W);
           nl(lines.length*5 + 1);
-          doc.text(lines, isLi ? L+4 : L, y); y += lines.length*5 + 1;
+          doc.text(lines, isLi ? L+4 : L, y); y += lines.length*5 + 1.5;
         }
       });
 
