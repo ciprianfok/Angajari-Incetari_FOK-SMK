@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fișă angajat — completează</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #eef1f5; color: #1f2328; }
+    header { background: #24292f; color: #fff; padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+    header a.back { color: #fff; text-decoration: none; opacity: .85; }
+    header .title { font-weight: 600; }
+    main { max-width: 720px; margin: 24px auto; padding: 0 16px 60px; }
+    .card { background: #fff; border: 1px solid #d0d7de; border-radius: 12px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .brand { font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #656d76; text-align: left; margin: 0 0 4px; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    .sub { color: #656d76; font-size: 14px; margin: 0 0 18px; }
+    label { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+    input, select, textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #d0d7de; border-radius: 8px;
+      font-size: 15px; font-family: inherit; background: #fff;
+    }
+    input.invalid, select.invalid, .sigwrap.invalid { border-color: #cf222e; background: #fff6f6; }
+    .hidden { display: none; }
+    .info { font-size: 12.5px; color: #656d76; line-height: 1.5; background: #f6f8fa;
+      border: 1px solid #e1e6ea; border-radius: 8px; padding: 10px 12px; margin-top: 6px; }
+    .pi-head, .pi-row { display: grid; grid-template-columns: 30px 1.6fr 1fr 1.2fr 28px; gap: 6px; align-items: center; }
+    .pi-head { font-size: 11px; font-weight: 700; color: #656d76; margin: 10px 0 4px; }
+    .pi-row { margin-bottom: 6px; }
+    .pi-row .nrc { text-align: center; font-weight: 600; color: #656d76; font-size: 13px; }
+    .pi-row input, .pi-row select { padding: 8px; font-size: 13px; }
+    .pi-row .rmv { background: none; border: none; color: #cf222e; font-size: 18px; cursor: pointer;
+      width: auto; margin: 0; padding: 0; }
+    @media (max-width: 620px) {
+      .pi-head { display: none; }
+      .pi-row { grid-template-columns: 1fr 1fr; border: 1px solid #e1e6ea; border-radius: 8px;
+        padding: 8px; margin-bottom: 10px; position: relative; }
+      .pi-row .nrc { position: absolute; top: 6px; right: 30px; }
+      .pi-row .pnume { grid-column: 1 / -1; }
+      .pi-row .rmv { position: absolute; top: 4px; right: 8px; }
+    }
+    .addbtn { margin-top: 6px; background: #eef1f5; color: #24292f; border: 1px solid #d0d7de;
+      border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 600; cursor: pointer; width: auto; }
+    .addbtn:hover { background: #e2e6eb; }
+    button.main {
+      margin-top: 22px; width: 100%; padding: 13px; border: none; border-radius: 8px;
+      background: #2da44e; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer;
+    }
+    button.main:hover { background: #2c974b; }
+    .hint { font-size: 12px; color: #8a929b; margin-top: 14px; text-align: center; }
+    .err { color: #cf222e; font-size: 13px; font-weight: 600; margin-top: 12px; text-align: center; display: none; }
+    .sigwrap { border: 1px dashed #b0b8c0; border-radius: 8px; background: #fff; margin-top: 6px; }
+    #sig { display: block; width: 100%; height: 160px; touch-action: none; border-radius: 8px; }
+    .sigclear { margin-top: 8px; background: #eef1f5; color: #24292f; border: 1px solid #d0d7de;
+      border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; width: auto; }
+    .sigclear:hover { background: #e2e6eb; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="index.html">←</a>
+    <span class="title">Fișă angajat</span>
+  </header>
+  <main>
+    <div class="card">
+      <p class="brand">FUMEAZAOK / SMOKEMANIA</p>
+      <h1>Fișă angajat</h1>
+      <p class="sub">Completează câmpurile și semnează, apoi apasă „Descarcă PDF".</p>
+
+      <label>Nume și prenume</label>
+      <input id="nume" type="text" placeholder="ex. Popescu Ion">
+
+      <label>CNP</label>
+      <input id="cnp" type="text" inputmode="numeric" placeholder="ex. 1990101223344">
+
+      <label>Adresa</label>
+      <input id="adresa" type="text" placeholder="ex. Str. Exemplu nr. 1, Pitești">
+
+      <label>Număr telefon</label>
+      <input id="telefon" type="text" inputmode="tel" placeholder="ex. 0712 345 678">
+
+      <label>Cont IBAN</label>
+      <input id="iban" type="text" placeholder="ex. RO49 AAAA 1B31 0075 9384 0000">
+
+      <label>Email</label>
+      <input id="email" type="email" placeholder="ex. nume@exemplu.ro">
+
+      <label>Persoane în întreținere</label>
+      <select id="intretinere">
+        <option value="nu" selected>Nu am</option>
+        <option value="am">Am</option>
+      </select>
+      <div class="info" id="infoNu">
+        Nu am persoane aflate în întreținerea mea (persoana în întreținere este acea persoană declarată ca
+        fiind în întreținerea angajatului respectiv, pentru care persoana angajată beneficiază de deducere
+        suplimentară la calculul impozitului pe salariu și care nu este declarată ca fiind persoană aflată în
+        întreținere și la locul de muncă al soțului/soției).
+      </div>
+
+      <div id="tabelWrap" class="hidden">
+        <div class="pi-head">
+          <div>Nr.</div><div>Nume și prenume</div><div>Calitate</div><div>CNP</div><div></div>
+        </div>
+        <div id="piRows"></div>
+        <button type="button" class="addbtn" id="addPi">+ Adaugă persoană</button>
+      </div>
+
+      <label>Data</label>
+      <input id="data" type="date">
+
+      <label>Semnătura</label>
+      <div class="sigwrap" id="sigwrap"><canvas id="sig"></canvas></div>
+      <button type="button" class="sigclear" id="sigclear">Șterge semnătura</button>
+
+      <button class="main" id="gen">⬇ Descarcă PDF</button>
+      <p class="err" id="err">Completează toate câmpurile și semnează înainte de descărcare.</p>
+      <p class="hint">Documentul se generează în calculatorul tău.</p>
+    </div>
+  </main>
+
+  <script src="jspdf.umd.min.js"></script>
+  <script>
+    function noDia(s){
+      return (s||'')
+        .replace(/[ăâà]/g,'a').replace(/[ĂÂÀ]/g,'A')
+        .replace(/[îì]/g,'i').replace(/[ÎÌ]/g,'I')
+        .replace(/[șş]/g,'s').replace(/[ȘŞ]/g,'S')
+        .replace(/[țţ]/g,'t').replace(/[ȚŢ]/g,'T')
+        .replace(/[éè]/g,'e').replace(/[ÉÈ]/g,'E')
+        .replace(/[–—]/g,'-').replace(/[„”"]/g,'"').replace(/['’]/g,"'");
+    }
+    function raw(id){ const el=document.getElementById(id); return el ? (el.value||'').trim() : ''; }
+    function dRO(v){ if(!v) return '__________'; const p=v.split('-'); return p.length===3 ? p[2]+'.'+p[1]+'.'+p[0] : v; }
+    function sigJpeg(cv){
+      const tmp = document.createElement('canvas');
+      tmp.width = cv.width; tmp.height = cv.height;
+      const c = tmp.getContext('2d');
+      c.fillStyle = '#fff'; c.fillRect(0,0,tmp.width,tmp.height);
+      c.drawImage(cv, 0, 0);
+      return tmp.toDataURL('image/jpeg', 0.6);
+    }
+
+    const sel = document.getElementById('intretinere');
+    const tabelWrap = document.getElementById('tabelWrap');
+    const infoNu = document.getElementById('infoNu');
+    sel.addEventListener('change', function(){
+      if(sel.value==='am'){ tabelWrap.classList.remove('hidden'); infoNu.classList.add('hidden'); if(piRowsBox.children.length===0) addPi(); }
+      else { tabelWrap.classList.add('hidden'); infoNu.classList.remove('hidden'); }
+    });
+
+    let piN = 0;
+    const piRowsBox = document.getElementById('piRows');
+    function renumber(){
+      let i=0;
+      piRowsBox.querySelectorAll('.pi-row').forEach(function(r){ i++; r.querySelector('.nrc').textContent = i; });
+    }
+    function addPi(){
+      piN++;
+      const div = document.createElement('div');
+      div.className = 'pi-row';
+      div.innerHTML =
+        '<div class="nrc"></div>'+
+        '<input class="pnume" type="text" placeholder="Nume și prenume">'+
+        '<select class="pcal"><option value="" disabled selected>Calitate</option><option>Copil</option><option>Soț/Soție</option><option>Părinte</option></select>'+
+        '<input class="pcnp" type="text" inputmode="numeric" placeholder="CNP">'+
+        '<button type="button" class="rmv" title="Șterge">×</button>';
+      piRowsBox.appendChild(div);
+      div.querySelector('.rmv').addEventListener('click', function(){ div.remove(); renumber(); });
+      renumber();
+    }
+    document.getElementById('addPi').addEventListener('click', addPi);
+
+    (function(){
+      const d=new Date();
+      document.getElementById('data').value = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    })();
+
+    const canvas = document.getElementById('sig');
+    const ctx = canvas.getContext('2d');
+    let drawing = false, hasSig = false;
+    function resizeCanvas(){
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#111';
+    }
+    setTimeout(resizeCanvas, 50);
+    function pos(e){
+      const r = canvas.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - r.left, y: t.clientY - r.top };
+    }
+    function start(e){ drawing = true; hasSig = true; document.getElementById('sigwrap').classList.remove('invalid'); const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); }
+    function move(e){ if(!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); }
+    function end(){ drawing = false; }
+    canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', move);
+    canvas.addEventListener('touchend', end);
+    document.getElementById('sigclear').addEventListener('click', function(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height); hasSig = false;
+    });
+
+    document.getElementById('gen').addEventListener('click', function(){
+      const err = document.getElementById('err');
+      err.style.display='none';
+      let ok=true;
+
+      ['nume','cnp','adresa','telefon','iban','email'].forEach(function(id){
+        const el=document.getElementById(id); el.classList.remove('invalid');
+        if(raw(id)===''){ el.classList.add('invalid'); ok=false; }
+      });
+
+      let persoane = [];
+      if(sel.value==='am'){
+        let anyEmpty = false;
+        piRowsBox.querySelectorAll('.pi-row').forEach(function(r){
+          const n = r.querySelector('.pnume'), c = r.querySelector('.pcal'), cn = r.querySelector('.pcnp');
+          [n,c,cn].forEach(function(e){ e.classList.remove('invalid'); });
+          if(n.value.trim()==='' || c.value==='' || cn.value.trim()===''){
+            if(n.value.trim()==='') n.classList.add('invalid');
+            if(c.value==='') c.classList.add('invalid');
+            if(cn.value.trim()==='') cn.classList.add('invalid');
+            anyEmpty = true;
+          } else {
+            persoane.push({ nume:n.value.trim(), cal:c.value, cnp:cn.value.trim() });
+          }
+        });
+        if(persoane.length===0 || anyEmpty) ok=false;
+      }
+
+      if(raw('data')===''){ document.getElementById('data').classList.add('invalid'); ok=false; }
+      if(!hasSig){ document.getElementById('sigwrap').classList.add('invalid'); ok=false; }
+      if(!ok){ err.style.display='block'; return; }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      const L=20, R=190; let y=24;
+
+      doc.setFont('helvetica','bold'); doc.setFontSize(10);
+      doc.text('FUMEAZAOK / SMOKEMANIA', L, y); y+=12;
+      doc.setFontSize(16);
+      doc.text('FISA ANGAJAT', 105, y, {align:'center'}); y+=16;
+
+      doc.setFont('helvetica','normal'); doc.setFontSize(12);
+      const line = (label, value) => {
+        const lines = doc.splitTextToSize(label + '  ' + value, R-L);
+        doc.text(lines, L, y); y += lines.length*7;
+      };
+      line('Nume si prenume:', noDia(raw('nume')));
+      line('CNP:', noDia(raw('cnp')));
+      line('Adresa:', noDia(raw('adresa')));
+      line('Numar telefon:', noDia(raw('telefon')));
+      line('Cont IBAN:', noDia(raw('iban')));
+      line('Email:', noDia(raw('email')));
+      y += 4;
+
+      doc.setFont('helvetica','bold');
+      doc.text('Persoane in intretinere:', L, y); y+=8;
+      doc.setFont('helvetica','normal');
+
+      if(sel.value==='nu'){
+        const txt = 'Nu am persoane aflate in intretinerea mea (persoana in intretinere este acea persoana declarata '
+          + 'ca fiind in intretinerea angajatului respectiv, pentru care persoana angajata beneficiaza de deducere '
+          + 'suplimentara la calculul impozitului pe salariu si care nu este declarata ca fiind persoana aflata in '
+          + 'intretinere si la locul de munca al sotului/sotiei).';
+        const lines = doc.splitTextToSize(txt, R-L);
+        doc.setFontSize(11); doc.text(lines, L, y); y += lines.length*6 + 6; doc.setFontSize(12);
+      } else {
+        const cols = [ {t:'Nr.',w:12}, {t:'Nume si prenume',w:75}, {t:'Calitate',w:40}, {t:'CNP',w:43} ];
+        let x=L;
+        doc.setFont('helvetica','bold'); doc.setFontSize(10);
+        cols.forEach(function(c){ doc.rect(x,y,c.w,7); doc.text(c.t, x+1.5, y+4.7); x+=c.w; });
+        y+=7;
+        doc.setFont('helvetica','normal');
+        persoane.forEach(function(p,i){
+          x=L;
+          const vals=[String(i+1), noDia(p.nume), noDia(p.cal), noDia(p.cnp)];
+          cols.forEach(function(c,ci){
+            doc.rect(x,y,c.w,7);
+            const tt = doc.splitTextToSize(vals[ci]||'', c.w-3);
+            doc.text(tt.slice(0,1), x+1.5, y+4.7);
+            x+=c.w;
+          });
+          y+=7;
+          if(y>265){ doc.addPage(); y=20; }
+        });
+        y += 8; doc.setFontSize(12);
+      }
+
+      y += 6;
+      if(y>250){ doc.addPage(); y=20; }
+      doc.text('Data: ' + dRO(raw('data')), L, y); y+=14;
+      doc.text('Semnatura:', L, y); y+=4;
+      doc.addImage(sigJpeg(canvas), 'JPEG', L, y, 50, 20);
+
+      doc.save('Fisa angajat ' + noDia(raw('nume')) + '.pdf');
+    });
+  </script>
+</body>
+</html>
