@@ -23,11 +23,12 @@
     input.invalid, select.invalid, .sigwrap.invalid { border-color: #cf222e; background: #fff6f6; }
     .hidden { display: none; }
     .fisa { border: 1px solid #e1e6ea; border-radius: 10px; background: #fafbfc; padding: 16px 18px;
-      max-height: 340px; overflow-y: auto; margin: 18px 0 6px; font-size: 13.5px; line-height: 1.55; }
-    .fisa h3 { font-size: 14px; margin: 14px 0 4px; color: #24292f; background: #e6e8eb; padding: 4px 8px; border-radius: 4px; }
-    .fisa h3:first-child { margin-top: 0; }
-    .fisa p { margin: 4px 0; }
-    .fisa .li { margin: 3px 0 3px 16px; text-indent: -12px; }
+      max-height: 340px; overflow-y: auto; margin: 18px 0 6px; font-size: 13px; line-height: 1.5; }
+    .fisa .s1 { font-weight: 700; background: #d8dade; padding: 4px 8px; border-radius: 4px; margin: 12px 0 6px; }
+    .fisa .s2 { font-weight: 700; margin: 8px 0 3px; }
+    .fisa .l1 { margin: 2px 0 2px 14px; }
+    .fisa .l2 { margin: 2px 0 2px 30px; }
+    .fisa .txt { margin: 3px 0 3px 14px; }
     .scroll-note { font-size: 12px; color: #8a929b; margin: 0 0 4px; }
     .chkrow { display: flex; align-items: flex-start; gap: 10px; margin-top: 16px;
       padding: 12px 14px; border: 1px solid #d0d7de; border-radius: 8px; background: #fff; }
@@ -97,99 +98,174 @@
   <script src="jspdf.umd.min.js"></script>
   <script>
     const FISA = [
-      {t:'Identificarea postului'},
-      {p:'Numele și prenumele titularului: {{nume}}'},
-      {p:'Denumirea postului: Lucrător comercial'},
-      {p:'Poziția în COR / Cod: 522303'},
-      {p:'Departamentul / locația: Punct de Lucru - {{punct}}'},
-      {p:'Nivelul postului: Execuție: Entry'},
-      {t:'Relațiile'},
-      {p:'Ierarhice: Se subordonează Șefului de Magazin. Are în subordine: Nu este cazul.'},
-      {p:'Funcționale (colaborare, pe orizontală): Cu alți colegi.'},
-      {p:'Reprezentare: Nu este cazul.'},
-      {t:'Scopul general al postului'},
-      {p:'Asigurarea desfășurării activității comerciale în condiții de legalitate, eficiență și profesionalism, prin vânzarea produselor, gestionarea corectă a stocurilor și respectarea tuturor procedurilor interne și obligațiilor legale aplicabile.'},
-      {t:'Obiectivele postului'},
-      {li:'Întocmirea documentelor specifice activității de vânzare a mărfii și a documentelor de primire a mărfurilor.'},
-      {li:'Promovarea imaginii magazinului și a standului.'},
-      {li:'Verificarea și menținerea stocurilor de rezervă.'},
-      {t:'Descrierea sarcinilor / atribuțiilor / activităților'},
-      {p:'La data începerii colaborării, angajatul se obligă să preia sub semnătură, în baza unui proces verbal de inventariere, toată marfa din punctul de lucru unde va lucra. Angajatul este direct răspunzător de corectitudinea stocului de marfă, atât pentru minusurile cât și pentru plusurile survenite.'},
-      {li:'Întâmpină clienții și primește solicitările lor pentru a afla necesitățile reale în raport cu produsele și serviciile oferite, aducându-le la cunoștința superiorului direct.'},
-      {li:'Identifică produsele rapid și corect, consultând listele de produse și stocurile.'},
-      {li:'Prezintă produsele prin atributele lor de calitate, pentru informarea corectă a clienților.'},
-      {li:'Informează clientul asupra prețului produselor și condițiilor de livrare.'},
-      {li:'Menține tot timpul prețul produselor afișat, la vedere, pe fiecare produs.'},
-      {li:'Ambalează produsele vândute conform normelor interne și legale.'},
-      {li:'Completează cu exactitate documentele de vânzare: borderouri, facturi etc.'},
-      {li:'Încasarea banilor se face prin numărare, pentru ca suma să corespundă chitanței.'},
-      {li:'Depune încasările în fiecare zi de Luni și Joi la Bancă sau le predă șefului de magazin, răspunzând administrativ, material și penal de orice pagubă produsă din vina proprie.'},
-      {t:'Pregătirea documentelor pentru contabilitate'},
-      {li:'Marchează zilnic pe raportul Z încasările prin card.'},
-      {li:'Aranjează rapoartele Z și Settlement în ordine cronologică (1 – sfârșitul lunii).'},
-      {li:'Generează raportul lunar detaliat pentru perioada 1 – ultima zi a lunii.'},
-      {li:'Verifică corectitudinea cotelor de TVA și informează superiorul în caz de neconcordanțe.'},
-      {li:'Generează la începutul lunii raportul ANAF (cod ON, 5, 8) și transmite dovada conform procedurii.'},
-      {li:'Atașează în plicul contabil toate bonurile și facturile de achiziție, chitanțele, concediile medicale și alte documente solicitate.'},
-      {li:'Transmite plicul către sediu în prima zi lucrătoare după încheierea lunii.'},
-      {t:'Menținerea standului și a stocurilor'},
-      {li:'Menține zilnic estetica standului și asigură igiena rafturilor și vitrinelor.'},
-      {li:'Susține imaginea standului prin materiale promoționale.'},
-      {li:'Monitorizează zilnic stocul de produse conform normelor interne.'},
-      {li:'Verifică în primele 5 zile ale lunii data de expirare a mărfii; dacă termenul e sub 45 de zile anunță șeful de magazin, altfel se obligă să achite produsele la prețul de achiziție.'},
-      {li:'La preluarea mărfii verifică comanda și anunță imediat superiorul dacă observă diferențe sau probleme.'},
-      {li:'Depozitează produsele cu respectarea NPM și PSI.'},
-      {li:'O dată pe lună (pe 15 sau 30) realizează stocul întregului magazin și redactează un proces verbal de inventariere, anunțând superiorul dacă apar diferențe.'},
-      {li:'Nu permite accesul în magazin niciunei persoane fără acordul scris și prealabil al superiorului.'},
-      {li:'Răspunde integral față de angajator pentru pagubele cauzate în gestiunea sa (administrativ, material și penal).'},
-      {li:'Își menține cunoștințele profesionale actualizate despre produsele comercializate.'},
-      {li:'La finalul colaborării realizează un proces verbal de inventariere; în lipsa prezenței, acceptă inventarul realizat de superiori.'},
-      {t:'Responsabilități — comunicare'},
-      {li:'Asigură o comunicare eficientă cu clienții și colaboratorii.'},
-      {li:'Răspunde de transmiterea de informații corecte și în timp util.'},
-      {li:'Efectuează instruirea profesională la locul de muncă și își menține cunoștințele la zi, folosind instrucțiuni și surse online; solicită sprijinul superiorului unde e nevoie.'},
-      {t:'Responsabilități — echipament'},
-      {li:'Respectă procedurile de utilizare a echipamentului din dotare.'},
-      {li:'Întreține echipamentul de protecție conform normelor.'},
-      {li:'Participă la instructajul periodic de protecția muncii.'},
-      {li:'Anunță imediat orice defecțiune a echipamentului.'},
-      {t:'Responsabilități — obiectivele postului'},
-      {li:'Răspunde de activitatea din magazin la cele mai înalte standarde.'},
-      {li:'Aplică procedurile de calitate și răspunde pentru produsele vândute.'},
-      {li:'Raportează deficiențele de calitate persoanelor abilitate.'},
-      {t:'Securitatea și sănătatea muncii'},
-      {li:'Participă la instructajele SSM și PSI și aplică normele.'},
-      {li:'Respectă măsurile de SSM, PSI și normele de ordine internă.'},
-      {t:'Regulamente / proceduri de lucru'},
-      {li:'Respectă programul, punctualitatea în raportări și cerințele de calitate.'},
-      {li:'Respectă procedurile de urgență și evacuare.'},
-      {li:'Respectă Regulamentul Intern, ROF, actele normative în vigoare și CCM aplicabil.'},
-      {t:'Condițiile de lucru'},
-      {p:'Program: ture de 2 zile lucrate urmate de 2 zile libere, media de 40 ore/săptămână conform Codului Muncii, ori altă variantă stabilită de angajați și aprobată de managerul de zonă.'},
-      {p:'Mediu de lucru: spațiu comercial interior, condiții normale. Poate fi detașat temporar la alte puncte de lucru din același oraș, cu acordul superiorului.'},
-      {t:'Indicatori de performanță'},
-      {li:'Grad de satisfacție clienți > 90%.'},
-      {li:'Zero reclamații justificate / trimestru.'},
-      {li:'Acuratețea gestiunii: diferențe < 0,5%.'},
-      {li:'Respectarea termenelor de raportare (100%).'},
-      {li:'Participare activă la acțiunile de promovare.'},
-      {li:'Perioada de evaluare a performanțelor: anual.'},
-      {t:'Specificațiile postului'},
-      {p:'Studii: profesionale sau liceale cu profil economic. Competențe în gestiune primară a mărfurilor. Experiența nu este obligatorie; au prioritate persoanele cu experiență în domeniul comercial.'},
-      {t:'Penalizări'},
-      {p:'Lucrătorul comercial răspunde material, disciplinar sau penal pentru pagubele cauzate din vina sa. Exemple:'},
-      {li:'Neîncasarea corectă a sumelor: avertisment scris + acoperire prejudiciu; a doua abatere: 5% din salariu o lună + prejudiciu; 3 abateri în 6 luni: desfacerea contractului + prejudiciu.'},
-      {li:'Nerespectarea programului: avertisment verbal, apoi scris, apoi desfacerea contractului. Absență nemotivată: 10% din salariu; repetare: desfacerea contractului.'},
-      {li:'Neconformitatea gestiunii: penalizare egală cu prejudiciul; diferențe mari: desfacerea contractului și acțiuni legale.'},
-      {li:'Nerespectarea normelor de siguranță: avertisment, apoi 5% din salariu; periclitarea siguranței: desfacerea contractului.'},
-      {li:'Refuzul sarcinilor: avertisment, apoi penalizare progresivă până la desfacerea contractului.'},
-      {li:'Abateri grave (furt, violență, hărțuire, consum de alcool/droguri la muncă): desfacerea imediată a contractului și posibile acțiuni legale.'},
-      {t:'Produse interzise minorilor'},
-      {p:'Constituie abatere disciplinară extrem de gravă vânzarea sau facilitarea vânzării către minori a produselor interzise persoanelor sub 18 ani. Salariatul are obligația de a solicita actul de identitate la orice îndoială privind vârsta. Nerespectarea se sancționează cu desfacerea contractului individual de muncă.'},
-      {t:'Răspunderea patrimonială'},
-      {p:'Dacă din culpa sau intenția salariatului Societatea este sancționată contravențional, administrativ sau penal, salariatul poate fi obligat la repararea integrală a prejudiciului, în condițiile art. 254 și următoarele din Codul muncii.'},
-      {t:'Respectarea ROI al partenerilor'},
-      {p:'Salariatul respectă Regulamentele de Ordine Interioară ale centrelor comerciale / partenerilor. Încălcarea care determină sancțiuni Societății atrage răspunderea disciplinară și patrimonială, conform art. 254 și următoarele din Codul muncii.'}
+      {type:'sec', n:'I', t:'Identificarea postului'},
+      {type:'n1', n:'1', t:'Numele și prenumele titularului: {{nume}}'},
+      {type:'n1', n:'2', t:'Denumirea postului: Lucrător comercial'},
+      {type:'n1', n:'3', t:'Poziția în COR / Cod: 522303'},
+      {type:'n1', n:'4', t:'Departamentul / locația: Punct de Lucru - {{punct}}'},
+      {type:'n1', n:'5', t:'Nivelul postului:'},
+      {type:'la', n:'', t:'Execuție: Entry'},
+      {type:'n1', n:'6', t:'Relațiile:'},
+      {type:'la', n:'a', t:'Ierarhice (control, îndrumare, posturi supervizate):'},
+      {type:'bul', t:'Se subordonează: Șefului de /Magazin'},
+      {type:'bul', t:'Are în subordine: Nu este cazul'},
+      {type:'la', n:'b', t:'Funcționale (colaborare, pe orizontală): Cu alți colegi'},
+      {type:'la', n:'c', t:'Reprezentare (colaborare, consultanță): Nu este cazul'},
+
+      {type:'sec', n:'II', t:'Descrierea postului'},
+      {type:'A', n:'A', t:'Scopul general al postului'},
+      {type:'n1', n:'1', t:'Asigurarea desfășurării activității comerciale în condiții de legalitate, eficiență și profesionalism, prin vânzarea produselor, gestionarea corectă a stocurilor și respectarea tuturor procedurilor interne și obligațiilor legale aplicabile.'},
+      {type:'A', n:'B', t:'Obiectivele postului'},
+      {type:'n1', n:'1', t:'Întocmirea documentelor specifice activității de vânzare a mărfii și a documentelor de primire a mărfurilor în vederea raportării activității desfășurate.'},
+      {type:'n1', n:'2', t:'Promovarea imaginii magazinului și a standului'},
+      {type:'n1', n:'3', t:'Verificarea și menținerea stocurilor de rezervă'},
+      {type:'A', n:'C', t:'Descrierea sarcinilor / atribuțiilor / activităților postului'},
+      {type:'n1', n:'1', t:'La data începerii colaborării, angajatul se obligă să preia sub semnătura, în baza unui proces verbal de inventariere toată marfa din punctul de lucru unde va lucra. Angajatul este direct răspunzator de corectitudinea stocului de marfă, din gestiunea punctului de lucru, atât pentru minusurile cât și pentru plusurile survenite in acesta.'},
+      {type:'n1', n:'2', t:'Întâmpină clienții;'},
+      {type:'n1', n:'3', t:'Primește solicitările clienților pentru a afla necesitățile reale ale acestora în raport cu produsele și serviciile oferite si le aduce la cunostinta superiorului direct.'},
+      {type:'n1', n:'4', t:'Identifică produsele rapid și corect pentru satisfacerea solicitării clienților prin consultarea listelor de produse, a stocurilor și prin vizualizare.'},
+      {type:'n1', n:'5', t:'Prezintă produsele solicitate prin atributele lor de calitate, în scopul informării corecte a clienților.'},
+      {type:'n1', n:'6', t:'Prezintă clientului, cu amabilitate, produsele și serviciile aferente vânzării pentru promovarea activității de vânzare și a imaginii magazinului.'},
+      {type:'n1', n:'7', t:'Informează clientul asupra prețului produselor și condițiilor de livrare, în scopul perfectării comenzii.'},
+      {type:'n1', n:'8', t:'Angajatul are obligația de a menține, tot timpul, prețul produselor afișat, la vedere, pe fiecare produs în parte.'},
+      {type:'n1', n:'9', t:'Ambalează produsele vândute utilizând materiale specifice, conform normelor interne și legale pentru asigurarea livrării în condiții calitative corespunzătoare.'},
+      {type:'n1', n:'10', t:'Identifică documentele specifice activității de vânzare în vederea completării cu exactitate a vânzărilor efectuate : borderouri, facturi etc.'},
+      {type:'n1', n:'11', t:'Facturile sunt înregistrate corect conform procedurilor interne și legale.'},
+      {type:'n1', n:'12', t:'Încasarea banilor se face prin numărare pentru ca suma sa corespundă celei înscrise pe chitanță.'},
+      {type:'n1', n:'13', t:'Acesta are obligația de a depune încasările din vânzarea produselor in fiecare zi de Luni si Joi, la Banca sau ii preda sefului de magazin, răspunzând administrativ, material și penal de orice pagubă produsă unității din vina proprie sau din neîndeplinirea atribuțiilor de serviciu.'},
+      {type:'n1', n:'14', t:'Compară documentele de vânzare cu cele de înregistrare a stocurilor pentru verificarea corectitudinii și legalitatea vânzărilor efectuate.'},
+      {type:'n1', n:'15', t:'Pregătirea documentelor pentru contabilitate'},
+      {type:'la', n:'a', t:'Pregătește documentele pentru contabilitate conform instruirii primite'},
+      {type:'la', n:'b', t:'Marchează zilnic pe raportul Z încasările prin card.'},
+      {type:'la', n:'c', t:'Aranjează rapoartele Z și Settlement în ordine cronologică (1 – sfârșitul lunii).'},
+      {type:'la', n:'d', t:'Generează raportul lunar detaliat pentru perioada 1 – ultima zi a lunii.'},
+      {type:'la', n:'e', t:'Verifică corectitudinea cotelor de TVA și informează superiorul în caz de neconcordanțe.'},
+      {type:'la', n:'f', t:'Generează la începutul lunii raportul ANAF (cod ON, 5, 8) și transmite dovada conform procedurii interne.'},
+      {type:'la', n:'g', t:'Atașează în plicul contabil toate bonurile și facturile de achiziție, chitanțele, concediile medicale și alte documente solicitate.'},
+      {type:'la', n:'h', t:'Transmite plicul către sediu în prima zi lucrătoare după încheierea lunii.'},
+      {type:'n1', n:'16', t:'Menține zilnic estetica standului prin aranjarea zilnică a produselor în funcție de solicitările sefului de magazin.'},
+      {type:'n1', n:'17', t:'Asigură zilnic igiena rafturilor si a vitrinelor.'},
+      {type:'n1', n:'18', t:'Imaginea standului este susținută permanent pentru promovarea vânzării produselor prin materialele promoționale și verbal: broșuri, prospecte, fișe de prezentare a produselor etc.'},
+      {type:'n1', n:'19', t:'Asigură monitorizarea stocului de produse: cantitățile de produse din stoc sunt verificate zilnic conform normelor interne și a prevederilor legale.'},
+      {type:'n1', n:'20', t:'Verifică starea produselor din stoc periodic conform normelor interne și a normelor de calitate ale producătorului.'},
+      {type:'n1', n:'21', t:'Identifică si controlează in primele 5 zile ale lunii, data de expirare a mărfii, iar dacă termenul de expirare al acestora este mai mic de 45 de zile, anunta seful de magazin, in caz contrar, angajatul se obligă să achite produsele la prețul de achiziție.'},
+      {type:'n1', n:'22', t:'La momentul preluării mărfii, angajatul se obligă să verifice comanda primită, iar în cazul în care observă diferențe (atât pe plus cât și pe minus) sau probleme cu produsele comandate, se obligă să solicite asistență și să încunoștințeze imediat superiorul pentru a rezolva problema.'},
+      {type:'n1', n:'23', t:'Depozitează produsele din stoc cu respectarea NPM și PSI pentru prevenirea accidentelor.'},
+      {type:'n1', n:'24', t:'Ridică ambalajele produselor aranjate în rafturi și/sau vitrine și le depozitează la gunoi imediat dupa finalizarea recepției mărfii.'},
+      {type:'n1', n:'25', t:'Întocmește documentele de evidență și de raportare a activității la predarea schimbului.'},
+      {type:'n1', n:'26', t:'Execută orice alte dispoziții date de superiorul ierarhic direct sau de supraordonații acestuia în realizarea strategiilor pe termen scurt ale companiei în limitele respectării temeiului legal.'},
+      {type:'n1', n:'27', t:'O dată pe lună, pe data de 15 sau 30, în funcție de ziua în care este prezent la muncă, se obligă să realizeze stocul întregului magazin și să redacteze un proces verbal de inventariere și să menționeze dacă există produse în plus sau în minus. În cazul în care vor apărea diferențe între stocul ținut de programul de gestiune și marfa faptică din magazin, angajatul se obligă să încunoștințeze de îndată superiorul.'},
+      {type:'n1', n:'28', t:'Angajatul este obligat să nu permită accesul în magazin niciunei persoane, decât cu acordul scris și prealabil al superiorului.'},
+      {type:'n1', n:'29', t:'Angajatul răspunde integral față de angajator pentru pagubele pe care le-a cauzat în gestiunea sa, răspunzând administrativ, material și penal de orice pagubă produsă unității din vina proprie sau din neîndeplinirea atribuțiilor de serviciu.'},
+      {type:'n1', n:'30', t:'Se obligă să își mențină cunoștințele profesionale actualizate în legătură cu produsele comercializate de angajator, inclusiv, dar fără a se limita la, caracteristicile tehnice, beneficiile utilizării și orice modificări sau inovații apărute pe piață.'},
+      {type:'n1', n:'31', t:'La finalul colaborării, angajatul trebuie să realizeze un proces verbal de inventariere al produselor din stocul magazinului unde a lucrat. În cazul în care nu se va prezenta, în mod expres, menționează că va fi de acord cu procesul verbal de inventariere realizat de superiorii acestuia și că își asumă responsabilitatea pentru orice diferențe dintre gestiunea menținută în calculator și situația faptică a produselor.'},
+      {type:'A', n:'D', t:'Descrierea responsabilităților postului:'},
+      {type:'n1', n:'1', t:'Privind relațiile interpersonale / comunicarea'},
+      {type:'la', n:'a', t:'Asigură o comunicare eficientă cu clienții si persoanele cu care colaborează.'},
+      {type:'la', n:'b', t:'Răspunde de acordarea si transmiterea de informații corecte si in timp util clienților'},
+      {type:'la', n:'c', t:'Asigură dezvoltarea permanentă a competențelor de comunicare personale.'},
+      {type:'la', n:'d', t:'Efectuează instruirea profesională la locul de muncă pentru însușirea normelor interne specifice activității desfășurate.'},
+      {type:'la', n:'e', t:'Asigură menținerea la zi a cunoștințelor și informațiilor referitoare la domeniul de activitate prin studierea documentațiilor pentru promovarea calitativă a vânzării. In acest scop se va folosi atat de instrucțiunile de utilizare, ale produselor noi, cât și de informații preluate din mediul online. Acolo unde informațiile nu sunt suficiente, solicită sprijinul superiorului direct, pentru a primi o pregătire adecvată, în vederea însușirii corecte și complete a caracteristicilor produselor respective.'},
+      {type:'n1', n:'2', t:'Față de echipamentul din dotare:'},
+      {type:'la', n:'a', t:'Echipamentul de Respectă procedurile interne legate de utilizarea echipamentului, aparaturii din dotare.'},
+      {type:'la', n:'b', t:'Echipamentul de protecție este întreținut și păstrat în condiții de siguranță conform normelor în vigoare.'},
+      {type:'la', n:'c', t:'Răspunde de însușirea clară și corectă a procedurilor de protecție a muncii prin participarea la instructajul periodic.'},
+      {type:'la', n:'d', t:'Răspunde de informarea imediată a persoanelor responsabile privind orice defecțiune în funcționare a echipamentului cu care își desfășoară activitatea.'},
+      {type:'n1', n:'3', t:'În raport cu obiectivele postului'},
+      {type:'la', n:'a', t:'Răspunde de activitatea desfășurata magazin, oferind servicii la cele mai înalte standarde;'},
+      {type:'la', n:'b', t:'Răspunde de aplicarea procedurilor de calitate impuse prin documentație și prin normele interne;'},
+      {type:'la', n:'c', t:'Răspunde pentru produsele vândute și pentru calitatea serviciilor aferente vânzării;'},
+      {type:'la', n:'d', t:'Răspunde de pregătirea locului de muncă și a echipamentului astfel încât rezultatele muncii să corespundă cerințelor de calitate;'},
+      {type:'la', n:'e', t:'Răspunde de deficiențele de calitate constatate, de analizarea lor cu promptitudine in vederea găsirii cauzelor, precum si a soluțiilor adecvate pentru remediere;'},
+      {type:'la', n:'f', t:'Deficiențele de calitate nesoluționate sunt raportate persoanelor abilitate conform normelor interne.'},
+      {type:'n1', n:'4', t:'Privind securitatea și sănătatea muncii'},
+      {type:'la', n:'a', t:'Participă la instructajele privind Securitatea și Sănătatea Muncii, PSI și răspunde de însușirea și aplicarea acestora;'},
+      {type:'la', n:'b', t:'Respectă măsurile de Securitatea și Sănătatea Muncii, PSI și a normelor de ordine internă și disciplină;'},
+      {type:'n1', n:'5', t:'Privind regulamentele / procedurile de lucru'},
+      {type:'la', n:'a', t:'Respectă procedurile de lucru generale specifice societății (programul de lucru, punctualitatea în întocmirea și predarea rapoartelor etc.);'},
+      {type:'la', n:'b', t:'Efectuează toate activitățile respectând cerințele de calitate impuse prin procedura de lucru;'},
+      {type:'la', n:'c', t:'Respectă procedurile de urgență și de evacuare și acordă primul ajutor în conformitate cu procedurile de la locul de muncă;'},
+      {type:'la', n:'d', t:'Respectă Regulamentul Intern și Regulamentul de Organizare și Funcționare;'},
+      {type:'la', n:'e', t:'Respectă și aplică actele normative în vigoare și Contractul Colectiv de Muncă aplicabil;'},
+      {type:'A', n:'E', t:'Condițiile de lucru ale postului'},
+      {type:'n1', n:'1', t:'Program: Organizarea activității în ture de 2 zile lucrate urmate de 2 zile libere, cu respectarea mediei de 40 de ore/săptămână conform Codului Muncii, ori în altă variantă de program stabilită de angajații magazinului și aprobată de managerul de zonă.;'},
+      {type:'n1', n:'2', t:'Condițiile materiale'},
+      {type:'la', n:'a', t:'Mediu de lucru: Spațiu comercial interior, condiții normale de muncă;'},
+      {type:'n1', n:'3', t:'Detașări: Poate fi detașat temporar la alte puncte de lucru din același oraș, cu acordul prealabil al superiorului;'},
+      {type:'la', n:'a', t:'Spațiu – Punctul de lucru din {{punct}}'},
+      {type:'n1', n:'4', t:'Condiții suplimentare (fac parte din categoria de beneficii) Nu este cazul.'},
+      {type:'n1', n:'5', t:'Condiții de formare profesională'},
+      {type:'la', n:'a', t:'Participă la diverse instruiri pe linie profesională și de dezvoltare personală, traininguri etc.'},
+      {type:'la', n:'b', t:'Buget Nu este cazul.'},
+      {type:'A', n:'F', t:'Gradul de autonomie'},
+      {type:'n1', n:'1', t:'Autoritate asupra altor posturi: Nu este cazul'},
+      {type:'n1', n:'2', t:'Delegare (înlocuitori, sarcini delegate)'},
+      {type:'la', n:'a', t:'înlocuiește pe: Alt coleg, cu responsabilități limitate.'},
+      {type:'la', n:'b', t:'este înlocuit de: Un alt coleg.'},
+      {type:'A', n:'G', t:'Indicatori de performanță'},
+      {type:'n1', n:'1', t:'Grad de satisfacție clienți > 90%'},
+      {type:'n1', n:'2', t:'Zero reclamații justificate / trimestru'},
+      {type:'n1', n:'3', t:'Acuratețea gestiunii: diferențe < 0.5%;'},
+      {type:'n1', n:'4', t:'Respectarea termenelor de raportare (100%)'},
+      {type:'n1', n:'5', t:'Participare activă la acțiunile de promovare ale magazinului.'},
+      {type:'n1', n:'6', t:'Perioada de evaluare a performanțelor – Anual'},
+
+      {type:'sec', n:'III', t:'Specificatiile postului'},
+      {type:'A', n:'A', t:'Nivelul de studii'},
+      {type:'n1', n:'1', t:'Studii profesionale sau liceale cu profil economic'},
+      {type:'A', n:'B', t:'Calificări / specializări necesare'},
+      {type:'n1', n:'1', t:'Competențe în gestiune primară a mărfurilor.'},
+      {type:'A', n:'C', t:'Competențele postului (pachet de competențe)'},
+      {type:'n1', n:'1', t:'dedicat lucrului cu clienții ;'},
+      {type:'n1', n:'2', t:'să aibă atitudine pozitivă;'},
+      {type:'n1', n:'3', t:'aptitudini de comunicare;'},
+      {type:'n1', n:'4', t:'aptitudinea de a lucra cu oamenii;'},
+      {type:'n1', n:'5', t:'spirit de observație;'},
+      {type:'n1', n:'6', t:'amabil, îndatoritor și manierat;'},
+      {type:'n1', n:'7', t:'spirit de inițiativă cu predispoziție spre acțiune;'},
+      {type:'n1', n:'8', t:'atent la detalii și nereguli;'},
+      {type:'n1', n:'9', t:'plin de inițiative, creativ, receptiv;'},
+      {type:'n1', n:'10', t:'adaptarea la sarcini de lucru schimbătoare;'},
+      {type:'n1', n:'11', t:'dedicat și capabil să lucreze cu minimum de supervizare;'},
+      {type:'n1', n:'12', t:'asumarea responsabilităților;'},
+      {type:'n1', n:'13', t:'rezistenta la efort si stres; preocupare pentru ridicarea nivelului profesional individual.'},
+      {type:'A', n:'D', t:'Experiența de lucru necesară (vechimea în specialitatea cerută de post)'},
+      {type:'n1', n:'1', t:'Nu este obligatorie;'},
+      {type:'n1', n:'2', t:'Au prioritate persoanele cu experiență în domeniul comercial.'},
+
+      {type:'sec', n:'IV', t:'Penalizari'},
+      {type:'txt', t:'Lucrătorul comercial răspunde material, disciplinar sau, după caz, penal, potrivit prevederilor legale în vigoare, pentru pagubele cauzate angajatorului din vina sa. Exemple de abateri și sancțiuni:'},
+      {type:'A', n:'A', t:'Neîncasarea corectă a sumelor de bani'},
+      {type:'n1', n:'1', t:'Prima abatere: avertisment scris + penalizare egală cu valoarea prejudiciului'},
+      {type:'n1', n:'2', t:'A doua abatere: penalizare 5% din salariu pentru o luna + penalizare egală cu valoarea prejudiciului'},
+      {type:'n1', n:'3', t:'Abateri repetate (3 abateri in decurs de 6 luni ): desfacerea contractului de muncă + penalizare egală cu valoarea prejudiciului'},
+      {type:'A', n:'B', t:'Nerespectarea programului de lucru'},
+      {type:'n1', n:'1', t:'Întârziere fără justificare: avertisment verbal'},
+      {type:'n1', n:'2', t:'Întârziere repetata fără justificare: avertisment scris'},
+      {type:'n1', n:'3', t:'Abateri repetate ( 3 abateri in decurs de 6 luni ): desfacerea contractului de muncă'},
+      {type:'n1', n:'4', t:'Absență nemotivată: penalizare 10% din salariu'},
+      {type:'n1', n:'5', t:'Repetare: desfacerea contractului'},
+      {type:'A', n:'C', t:'Neconformitatea gestiunii (diferențe în stocuri)'},
+      {type:'n1', n:'1', t:'Penalizare egală cu valoarea prejudiciului'},
+      {type:'n1', n:'2', t:'Pentru diferențe mari: desfacerea contractului și acțiuni legale'},
+      {type:'A', n:'D', t:'Nerespectarea normelor de siguranță și protecție a muncii'},
+      {type:'n1', n:'1', t:'Prima abatere: avertisment'},
+      {type:'n1', n:'2', t:'Abateri repetate: penalizare 5% din salariu'},
+      {type:'n1', n:'3', t:'Periclitarea siguranței colegilor sau clienților: desfacerea contractului'},
+      {type:'A', n:'E', t:'Refuzul de a respecta sarcinile trasate de superiori'},
+      {type:'n1', n:'1', t:'Prima abatere: avertisment'},
+      {type:'n1', n:'2', t:'Abateri repetate: penalizare progresivă până la desfacerea contractului'},
+      {type:'A', n:'F', t:'Abateri grave (furt, violență, hărțuire, consum de alcool/droguri la locul de muncă)'},
+      {type:'n1', n:'1', t:'Sancțiune: desfacerea imediată a contractului'},
+      {type:'n1', n:'2', t:'Posibile acțiuni legale'},
+      {type:'A', n:'G', t:'Obligații speciale privind produsele interzise minorilor'},
+      {type:'txt', t:'Constituie abatere disciplinară extrem de gravă vânzarea sau facilitarea vânzării produselor interzise persoanelor sub 18 ani către minori.'},
+      {type:'la', n:'a', t:'Salariatul are obligația expresă de a solicita actul de identitate atunci când există orice îndoială privind vârsta cumpărătorului.'},
+      {type:'la', n:'b', t:'Nerespectarea obligației prevăzute la pct. G, lit. a, care ca și consecință vânzarea produselor cu nicotină sau celor interzise de lege minorilor se va sancționa prin desfacerea contractului individual de muncă.'},
+      {type:'n1', n:'2', t:'Răspunderea patrimonială'},
+      {type:'la', n:'a', t:'În cazul în care, din culpa sau intenția salariatului, Societatea este sancționată contravențional, administrativ sau penal, iar sancțiunea este consecința directă a faptei acestuia, salariatul poate fi obligat la repararea integrală a prejudiciului, în condițiile art. 254 și următoarele din Codul muncii.'},
+      {type:'n1', n:'3', t:'Respectarea ROI al partenerilor'},
+      {type:'la', n:'a', t:'Salariatul este obligat să respecte Regulamentele de Ordine Interioară ale centrelor comerciale sau ale partenerilor unde își desfășoară activitatea. Încălcarea acestor reguli care determină aplicarea de sancțiuni sau penalități financiare Societății poate atrage răspunderea disciplinară și patrimonială a salariatului, în condițiile art. 254 și următoarele din Codul muncii.'}
     ];
 
     function noDia(s){
@@ -199,7 +275,7 @@
         .replace(/[șş]/g,'s').replace(/[ȘŞ]/g,'S')
         .replace(/[țţ]/g,'t').replace(/[ȚŢ]/g,'T')
         .replace(/[éè]/g,'e').replace(/[ÉÈ]/g,'E')
-        .replace(/[–—]/g,'-').replace(/[„”"]/g,'"').replace(/[’]/g,"'");
+        .replace(/[–—]/g,'-').replace(/[„”"]/g,'"').replace(/['’]/g,"'");
     }
     function raw(id){ return (document.getElementById(id).value || '').trim(); }
     function dRO(v){ if(!v) return '__________'; const p=v.split('-'); return p.length===3 ? p[2]+'.'+p[1]+'.'+p[0] : v; }
@@ -222,9 +298,13 @@
       function refresh(){
         let h='';
         FISA.forEach(function(b){
-          if(b.t) h+='<h3>'+b.t+'</h3>';
-          else if(b.p) h+='<p>'+subst(b.p)+'</p>';
-          else if(b.li) h+='<p class="li">• '+subst(b.li)+'</p>';
+          const t = subst(b.t);
+          if(b.type==='sec') h+='<div class="s1">'+b.n+') '+t+'</div>';
+          else if(b.type==='A') h+='<div class="s2">'+b.n+') '+t+'</div>';
+          else if(b.type==='n1') h+='<div class="l1">'+b.n+') '+t+'</div>';
+          else if(b.type==='la') h+='<div class="l2">'+(b.n?b.n+') ':'')+t+'</div>';
+          else if(b.type==='bul') h+='<div class="l2">• '+t+'</div>';
+          else if(b.type==='txt') h+='<div class="txt">'+t+'</div>';
         });
         box.innerHTML=h;
       }
@@ -292,49 +372,54 @@
 
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ unit:'mm', format:'a4' });
-      const L=18, W=174, BOTTOM=280; let y=18;
+      const PL=18, PR=195, BOTTOM=280; let y=18;
       function nl(h){ if(y+h > BOTTOM){ doc.addPage(); y=18; } }
 
-      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(20);
-      doc.text('FUMEAZAOK / SMOKEMANIA', L, y); y+=8;
-      doc.setFontSize(15);
-      doc.text('FISA POSTULUI - LUCRATOR COMERCIAL', 105, y, {align:'center'}); y+=12;
+      doc.setFont('helvetica','bold'); doc.setFontSize(15);
+      doc.text('FISA POSTULUI', 105, y, {align:'center'}); y+=7;
+      doc.setFontSize(12);
+      doc.text('Post: Lucrator comercial', 105, y, {align:'center'}); y+=10;
 
-      FISA.forEach(function(b){
-        if(b.t){
-          nl(12); y += 3;
-          doc.setFillColor(220,220,220);
-          doc.rect(L, y-4.5, W, 7, 'F');
-          doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(20);
-          doc.text(noDia(b.t), L+2, y); y += 6;
-        } else {
-          doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(20);
-          const isLi = !!b.li;
-          const raw2 = noDia(subst(b.p || b.li));
-          const prefix = isLi ? '- ' : '';
-          const lines = doc.splitTextToSize(prefix + raw2, isLi ? W-4 : W);
-          nl(lines.length*5 + 1);
-          doc.text(lines, isLi ? L+4 : L, y); y += lines.length*5 + 1.5;
+      function draw(b){
+        const t = noDia(subst(b.t));
+        let x, w, bold=false, gri=false, prefix='';
+        if(b.type==='sec'){ x=PL; w=PR-PL-4; bold=true; gri=true; prefix=b.n+')  '; }
+        else if(b.type==='A'){ x=PL; w=PR-PL; bold=true; prefix=b.n+')  '; }
+        else if(b.type==='n1'){ x=PL+6; w=PR-(PL+6); prefix=b.n+')  '; }
+        else if(b.type==='la'){ x=PL+14; w=PR-(PL+14); prefix=(b.n?b.n+')  ':''); }
+        else if(b.type==='bul'){ x=PL+14; w=PR-(PL+14); prefix='•  '; }
+        else { x=PL; w=PR-PL; }
+
+        doc.setFont('helvetica', bold?'bold':'normal'); doc.setFontSize(10);
+        const lines = doc.splitTextToSize(prefix + t, w - 2);
+        const h = lines.length*5 + (gri?3:1.5);
+        nl(h + (gri?4:0));
+        if(gri){
+          y += 3;
+          doc.setFillColor(210,210,210);
+          doc.rect(PL, y-4.5, PR-PL, lines.length*5+2, 'F');
         }
-      });
+        doc.setTextColor(20);
+        doc.text(lines, x, y);
+        y += lines.length*5 + (gri?3.5:1.8);
+      }
+      FISA.forEach(draw);
 
-      y += 6;
-      nl(30);
+      y += 8; nl(46);
       doc.setFont('helvetica','normal'); doc.setFontSize(10);
-      doc.text('Functia: ' + noDia(selVal('functia')), L, y); y+=8;
-      doc.text('Data: ' + dRO(raw('data')), L, y); y+=12;
+      doc.text('Data:', PL, y); y+=5;
+      doc.text(dRO(raw('data')), PL, y); y+=16;
 
-      nl(40);
-      doc.text('Numele si semnatura titularului postului,', L, y);
-      doc.text('Numele si semnatura superiorului ierarhic,', 110, y); y+=4;
-      doc.addImage(sigJpeg(canvas), 'JPEG', L, y, 45, 18);
+      doc.text('Numele si semnatura titularului postului,', PL, y);
+      doc.text('Numele si semnatura superiorului ierarhic,', 110, y); y+=3;
+      doc.addImage(sigJpeg(canvas), 'JPEG', PL, y, 45, 18);
       y+=20;
-      doc.text(noDia(raw('nume')), L, y);
+      doc.text(noDia(raw('nume')), PL, y);
       doc.line(110, y, 185, y); y+=14;
-      doc.setFont('helvetica','bold');
-      doc.text('APROBAT', L, y);
-      doc.setFont('helvetica','normal');
-      doc.text('Director General', L, y+6);
+      doc.setFont('helvetica','bold'); doc.setFontSize(11);
+      doc.text('A P R O B A T', 105, y, {align:'center'}); y+=6;
+      doc.setFont('helvetica','normal'); doc.setFontSize(10);
+      doc.text('Director General', 105, y, {align:'center'});
 
       doc.save('Fisa post ' + noDia(raw('nume')) + '.pdf');
     });
